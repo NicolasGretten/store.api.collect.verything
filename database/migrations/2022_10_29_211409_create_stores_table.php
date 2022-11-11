@@ -15,20 +15,20 @@ return new class extends Migration
     {
         Schema::create('stores', function (Blueprint $table) {
             $table->string('id')->primary();
-            $table->string('accountId');
+            $table->string('account_id');
             $table->string('name');
-            $table->string('businessName');
-            $table->string('addressId');
+            $table->string('business_name');
+            $table->string('address_id');
             $table->string('phone');
             $table->string('email');
             $table->string('type');
             $table->string('openings');
-            $table->string('primaryColor');
-            $table->string('SecondaryColor');
+            $table->string('primary_color');
+            $table->string('secondary_color');
             $table->string('logo');
-            $table->timestamp('deletedAt')->nullable();
-            $table->timestamp('updatedAt')->nullable();
-            $table->timestamp('createdAt')->nullable();
+            $table->timestamp('deleted_at')->nullable();
+            $table->timestamp('updated_at')->nullable();
+            $table->timestamp('created_at')->nullable();
         });
     }
 

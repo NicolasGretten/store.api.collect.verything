@@ -3,11 +3,15 @@
 namespace App\Traits;
 
 use Exception;
+use Illuminate\Support\Facades\App;
 
 trait LocaleTrait
 {
     use JwtTrait;
 
+    /**
+     * @throws Exception
+     */
     public function setLocale()
     {
         if (!empty(app('request')->input('locale'))) {
@@ -25,9 +29,12 @@ trait LocaleTrait
 
         self::checkRequestedLocale($locale);
 
-        app()->setLocale($locale);
+        App::setLocale($locale);
     }
 
+    /**
+     * @throws Exception
+     */
     public function checkRequestedLocale($locale)
     {
         $localesAllowed = explode(',', env('LOCALES_ALLOWED'));

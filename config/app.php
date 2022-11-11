@@ -186,6 +186,7 @@ return [
          * Package Service Providers...
          */
         Bugsnag\BugsnagLaravel\BugsnagServiceProvider::class,
+        Astrotomic\Translatable\TranslatableServiceProvider::class,
 
         /*
          * Application Service Providers...

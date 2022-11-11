@@ -9,7 +9,7 @@ return [
     | Contains an array with the applications available locales.
     |
     */
-    // 'locales' => getLocalesAllowed(), // todo : Bug Please make sure you have run `php artisan vendor:publish --provider=\"Astrotomic\\Translatable\\TranslatableServiceProvider\"` and that the locales configuration is defined.
+//    'locales' => getLocalesAllowed(),
 
     /*
     |--------------------------------------------------------------------------
@@ -21,7 +21,7 @@ return [
     | colombian spanish will be saved as 'es-CO' into the database.
     |
     */
-    'locale_separator' => '-',
+    'locale_separator' => '',
 
     /*
     |--------------------------------------------------------------------------

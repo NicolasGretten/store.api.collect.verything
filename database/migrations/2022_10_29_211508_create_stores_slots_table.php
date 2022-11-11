@@ -15,15 +15,19 @@ return new class extends Migration
     {
         Schema::create('stores_slots', function (Blueprint $table) {
             $table->string('id')->primary();
-            $table->string('storeId');
+            $table->string('store_id');
             $table->string('day');
             $table->string('from');
             $table->string('to');
             $table->integer('quantity');
             $table->boolean('available')->default('true');
-            $table->timestamp('deletedAt')->nullable();
-            $table->timestamp('updatedAt')->nullable();
-            $table->timestamp('createdAt')->nullable();
+            $table->timestamp('deleted_at')->nullable();
+            $table->timestamp('updated_at')->nullable();
+            $table->timestamp('created_at')->nullable();
+
+            $table->foreign('store_id')->references('id')->on('stores')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
         });
     }
 

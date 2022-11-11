@@ -1,18 +1,747 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "title": "Template API Collect&Verything",
+        "title": "Store API Collect&Verything",
         "version": "0.1"
     },
     "paths": {
-        "/": {
-            "get": {
-                "description": "Home page",
+        "/api/stores/{id}/closings": {
+            "post": {
+                "tags": [
+                    "Stores"
+                ],
+                "summary": "Post a new store closing",
+                "description": "Create a new store closing",
+                "operationId": "addClosing",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "Store Id",
+                        "required": true
+                    },
+                    {
+                        "name": "from",
+                        "in": "query",
+                        "description": "From",
+                        "required": true
+                    },
+                    {
+                        "name": "to",
+                        "in": "query",
+                        "description": "To",
+                        "required": true
+                    }
+                ],
                 "responses": {
-                    "default": {
-                        "description": "Welcome page"
+                    "201": {
+                        "description": "Account created"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
                     }
                 }
+            }
+        },
+        "/api/stores/{id}/closings/{closing_id}": {
+            "delete": {
+                "tags": [
+                    "Stores"
+                ],
+                "summary": "Delete a store closing",
+                "description": "Soft delete a store closing",
+                "operationId": "removeClosing",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Account id",
+                        "required": true
+                    },
+                    {
+                        "name": "closing_id",
+                        "in": "path",
+                        "description": "Closing id",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Closing deleted"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/stores/{id}": {
+            "get": {
+                "tags": [
+                    "Stores"
+                ],
+                "summary": "Get store information",
+                "description": "Returns store data",
+                "operationId": "retrieve",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Store id",
+                        "required": true
+                    },
+                    {
+                        "name": "locale",
+                        "in": "path",
+                        "description": "Locale",
+                        "required": false
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Account not found."
+                    },
+                    "409": {
+                        "description": "Conflict"
+                    },
+                    "500": {
+                        "description": "Servor Error"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Stores"
+                ],
+                "summary": "Delete a store",
+                "description": "Soft delete a store",
+                "operationId": "delete",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Store id",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Account deleted"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            },
+            "patch": {
+                "tags": [
+                    "Stores"
+                ],
+                "summary": "Patch a store",
+                "description": "Update an store",
+                "operationId": "update",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Store id",
+                        "required": true
+                    },
+                    {
+                        "name": "account_id",
+                        "in": "query",
+                        "description": "Account Id",
+                        "required": false
+                    },
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "description": "Store name",
+                        "required": false
+                    },
+                    {
+                        "name": "business_name",
+                        "in": "query",
+                        "description": "Store business Name",
+                        "required": false
+                    },
+                    {
+                        "name": "address_id",
+                        "in": "query",
+                        "description": "Address Id",
+                        "required": false
+                    },
+                    {
+                        "name": "phone",
+                        "in": "query",
+                        "description": "Store phone",
+                        "required": false
+                    },
+                    {
+                        "name": "email",
+                        "in": "query",
+                        "description": "Store email",
+                        "required": false
+                    },
+                    {
+                        "name": "type",
+                        "in": "query",
+                        "description": "Store type",
+                        "required": false
+                    },
+                    {
+                        "name": "openings",
+                        "in": "query",
+                        "description": "Store openings",
+                        "required": false
+                    },
+                    {
+                        "name": "primary_color",
+                        "in": "query",
+                        "description": "Store primary color",
+                        "required": false
+                    },
+                    {
+                        "name": "secondary_color",
+                        "in": "query",
+                        "description": "Store secondary color",
+                        "required": false
+                    },
+                    {
+                        "name": "logo",
+                        "in": "query",
+                        "description": "Store logo",
+                        "required": false
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Account updated"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/stores": {
+            "get": {
+                "tags": [
+                    "Stores"
+                ],
+                "summary": "Get all stores information",
+                "description": "Returns store data",
+                "operationId": "list",
+                "parameters": [
+                    {
+                        "name": "locale",
+                        "in": "path",
+                        "description": "Locale",
+                        "required": false
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "403": {
+                        "description": "Forbidden"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    },
+                    "409": {
+                        "description": "Conflict"
+                    },
+                    "500": {
+                        "description": "Servor Error"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Stores"
+                ],
+                "summary": "Post a new store",
+                "description": "Create a new store",
+                "operationId": "create",
+                "parameters": [
+                    {
+                        "name": "account_id",
+                        "in": "query",
+                        "description": "Account Id",
+                        "required": true
+                    },
+                    {
+                        "name": "name",
+                        "in": "query",
+                        "description": "Store name",
+                        "required": true
+                    },
+                    {
+                        "name": "business_name",
+                        "in": "query",
+                        "description": "Store business name",
+                        "required": true
+                    },
+                    {
+                        "name": "address_id",
+                        "in": "query",
+                        "description": "Address Id",
+                        "required": true
+                    },
+                    {
+                        "name": "phone",
+                        "in": "query",
+                        "description": "Store phone",
+                        "required": true
+                    },
+                    {
+                        "name": "email",
+                        "in": "query",
+                        "description": "Store email",
+                        "required": true
+                    },
+                    {
+                        "name": "type",
+                        "in": "query",
+                        "description": "Store type",
+                        "required": true
+                    },
+                    {
+                        "name": "openings",
+                        "in": "query",
+                        "description": "Store openings",
+                        "required": true
+                    },
+                    {
+                        "name": "primary_color",
+                        "in": "query",
+                        "description": "Store primary color",
+                        "required": true
+                    },
+                    {
+                        "name": "secondary_color",
+                        "in": "query",
+                        "description": "Store secondary color",
+                        "required": true
+                    },
+                    {
+                        "name": "logo",
+                        "in": "query",
+                        "description": "Store logo",
+                        "required": true
+                    },
+                    {
+                        "name": "locale",
+                        "in": "query",
+                        "description": "Locale",
+                        "required": true
+                    },
+                    {
+                        "name": "description",
+                        "in": "query",
+                        "description": "Description",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Account created"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/stores/{id}/images": {
+            "post": {
+                "tags": [
+                    "Stores"
+                ],
+                "summary": "Post a new store image",
+                "description": "Create a new store image",
+                "operationId": "addImage",
+                "parameters": [
+                    {
+                        "name": "title",
+                        "in": "query",
+                        "description": "Store title",
+                        "required": true
+                    },
+                    {
+                        "name": "storeLine1",
+                        "in": "query",
+                        "description": "Store line 1",
+                        "required": true
+                    },
+                    {
+                        "name": "storeLine2",
+                        "in": "query",
+                        "description": "Store line 2"
+                    },
+                    {
+                        "name": "zipCode",
+                        "in": "query",
+                        "description": "Zip code",
+                        "required": true
+                    },
+                    {
+                        "name": "city",
+                        "in": "query",
+                        "description": "City",
+                        "required": true
+                    },
+                    {
+                        "name": "country",
+                        "in": "query",
+                        "description": "Store country",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Account created"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/stores/{id}/images/{image_id}": {
+            "delete": {
+                "tags": [
+                    "Stores"
+                ],
+                "summary": "Delete a store image",
+                "description": "Soft delete a store image",
+                "operationId": "removeImage",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Account id",
+                        "required": true
+                    },
+                    {
+                        "name": "image_id",
+                        "in": "path",
+                        "description": "Image id",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Account deleted"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/stores/{id}/medias": {
+            "post": {
+                "tags": [
+                    "Stores"
+                ],
+                "summary": "Post a new store media",
+                "description": "Create a new store media",
+                "operationId": "addMedia",
+                "parameters": [
+                    {
+                        "name": "title",
+                        "in": "query",
+                        "description": "Store title",
+                        "required": true
+                    },
+                    {
+                        "name": "storeLine1",
+                        "in": "query",
+                        "description": "Store line 1",
+                        "required": true
+                    },
+                    {
+                        "name": "storeLine2",
+                        "in": "query",
+                        "description": "Store line 2"
+                    },
+                    {
+                        "name": "zipCode",
+                        "in": "query",
+                        "description": "Zip code",
+                        "required": true
+                    },
+                    {
+                        "name": "city",
+                        "in": "query",
+                        "description": "City",
+                        "required": true
+                    },
+                    {
+                        "name": "country",
+                        "in": "query",
+                        "description": "Store country",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Account created"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/stores/{id}/medias/{mediaId}": {
+            "delete": {
+                "tags": [
+                    "Stores"
+                ],
+                "summary": "Delete a store media",
+                "description": "Soft delete a store media",
+                "operationId": "removeMedia",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Account id",
+                        "required": true
+                    },
+                    {
+                        "name": "mediaId",
+                        "in": "path",
+                        "description": "Media id",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Account deleted"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/stores/{id}/slots": {
+            "post": {
+                "tags": [
+                    "Stores"
+                ],
+                "summary": "Post a new store slot",
+                "description": "Create a new store slot",
+                "operationId": "addSlot",
+                "parameters": [
+                    {
+                        "name": "title",
+                        "in": "query",
+                        "description": "Store title",
+                        "required": true
+                    },
+                    {
+                        "name": "storeLine1",
+                        "in": "query",
+                        "description": "Store line 1",
+                        "required": true
+                    },
+                    {
+                        "name": "storeLine2",
+                        "in": "query",
+                        "description": "Store line 2"
+                    },
+                    {
+                        "name": "zipCode",
+                        "in": "query",
+                        "description": "Zip code",
+                        "required": true
+                    },
+                    {
+                        "name": "city",
+                        "in": "query",
+                        "description": "City",
+                        "required": true
+                    },
+                    {
+                        "name": "country",
+                        "in": "query",
+                        "description": "Store country",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Account created"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/stores/{id}/slots/{slotId}": {
+            "delete": {
+                "tags": [
+                    "Stores"
+                ],
+                "summary": "Delete a store slot",
+                "description": "Soft delete a store slot",
+                "operationId": "removeSlot",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Account id",
+                        "required": true
+                    },
+                    {
+                        "name": "slotId",
+                        "in": "path",
+                        "description": "Slot id",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Account deleted"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/stores/{id}/translations": {
+            "post": {
+                "tags": [
+                    "Stores"
+                ],
+                "summary": "Post a new store translation",
+                "description": "Create a new store translation",
+                "operationId": "addTranslation",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "query",
+                        "description": "Store id",
+                        "required": true
+                    },
+                    {
+                        "name": "locale",
+                        "in": "query",
+                        "description": "Locale",
+                        "required": true
+                    },
+                    {
+                        "name": "description",
+                        "in": "query",
+                        "description": "Description",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Account created"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        },
+        "/api/stores/{id}/translations/{translationId}": {
+            "delete": {
+                "tags": [
+                    "Stores"
+                ],
+                "summary": "Delete a store translation",
+                "description": "Soft delete a store translation",
+                "operationId": "removeTranslation",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Account id",
+                        "required": true
+                    },
+                    {
+                        "name": "locale",
+                        "in": "path",
+                        "description": "Locale",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Account deleted"
+                    },
+                    "400": {
+                        "description": "Bad request"
+                    },
+                    "404": {
+                        "description": "Resource Not Found"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "bearer_token": {
+                "type": "apiKey",
+                "description": "Enter token in format (Bearer <token>)",
+                "name": "Authorization",
+                "in": "header"
             }
         }
     },

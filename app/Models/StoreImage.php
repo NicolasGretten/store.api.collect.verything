@@ -2,26 +2,22 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
 /**
  * @method static select(string $string)
  */
-class User extends Authenticatable
+class StoreImage extends Model
 {
     use HasApiTokens, HasFactory, Notifiable, SoftDeletes;
 
-    protected $dates = ['createdAt, updatedAt, deletedAt'];
-    const DELETED_AT = 'deletedAt';
-    const UPDATED_AT = 'updatedAt';
-    const CREATED_AT = 'createdAt';
+    protected $dates = ['created_at, updated_at, deleted_at'];
     protected $connection = 'data';
-    protected $table = 'users';
+    protected $table = 'stores_images';
     protected $primaryKey = 'id';
     public $incrementing = false;
     protected $keyType = 'string';
@@ -32,9 +28,7 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
-        'email',
-        'password',
+
     ];
 
     /**
@@ -43,8 +37,7 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $hidden = [
-        'password',
-        'remember_token',
+
     ];
 
     /**
@@ -53,6 +46,6 @@ class User extends Authenticatable
      * @var array<string, string>
      */
     protected $casts = [
-        'email_verified_at' => 'datetime',
+
     ];
 }

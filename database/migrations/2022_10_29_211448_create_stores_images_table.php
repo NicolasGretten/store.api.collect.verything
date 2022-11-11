@@ -15,11 +15,15 @@ return new class extends Migration
     {
         Schema::create('stores_images', function (Blueprint $table) {
             $table->string('id')->primary();
-            $table->string('storeId');
-            $table->string('imageId');
-            $table->timestamp('deletedAt')->nullable();
-            $table->timestamp('updatedAt')->nullable();
-            $table->timestamp('createdAt')->nullable();
+            $table->string('store_id');
+            $table->string('image_id');
+            $table->timestamp('deleted_at')->nullable();
+            $table->timestamp('updated_at')->nullable();
+            $table->timestamp('created_at')->nullable();
+
+            $table->foreign('store_id')->references('id')->on('stores')
+                ->onDelete('cascade')
+                ->onUpdate('cascade');
         });
     }
 
