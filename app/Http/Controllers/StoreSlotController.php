@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Store;
+use App\Models\StoreSlots;
 use App\Traits\FiltersTrait;
 use App\Traits\IdTrait;
 use App\Traits\JwtTrait;
@@ -29,12 +30,11 @@ class StoreSlotController extends Controller
      *      tags={"Stores"},
      *      summary="Post a new store slot",
      *      description="Create a new store slot",
-     *      @OA\Parameter(name="title", description="Store title", required=true, in="query"),
-     *      @OA\Parameter(name="storeLine1", description="Store line 1", required=true, in="query"),
-     *      @OA\Parameter(name="storeLine2", description="Store line 2", in="query"),
-     *      @OA\Parameter(name="zipCode", description="Zip code", required=true, in="query"),
-     *      @OA\Parameter(name="city", description="City", required=true, in="query"),
-     *      @OA\Parameter(name="country", description="Store country", required=true, in="query"),
+     *      @OA\Parameter(name="day", description="Day", required=true, in="query"),
+     *      @OA\Parameter(name="from", description="From", required=true, in="query"),
+     *      @OA\Parameter(name="to", description="To", in="query"),
+     *      @OA\Parameter(name="quantity", description="Quantity", required=true, in="query"),
+     *      @OA\Parameter(name="available", description="Availability", required=true, in="query"),
      *      @OA\Response(response=201,description="Account created"),
      *      @OA\Response(response=400, description="Bad request"),
      *      @OA\Response(response=404, description="Resource Not Found")
@@ -44,29 +44,22 @@ class StoreSlotController extends Controller
     {
         try {
             $this->validate($request, [
-                'title'                     => 'required|string',
-                'storeLine1'            => 'required|string',
-                'storeLine2'            => 'string',
-                'zipCode'                  => 'required|string',
-                'city'                      => 'required|string',
-                'state'                     => 'string',
-                'country'                   => 'required|string',
+                'day'               => 'required|string',
+                'from'              => 'required|string',
+                'to'                => 'required|string',
+                'quantity'          => 'required|string',
+                'available'         => 'required|string',
             ]);
 
             DB::beginTransaction();
 
-            $geocoding = app('geocoder')->geocode($request->input('storeLine1').', '.$request->input('zipCode').''.$request->input('city').''.$request->input('country'))->get()->first();
-
-            $store = new Store();
-            $store->id                        = $this->generateId('store', $store);
-            $store->title                     = $request->input('title');
-            $store->storeLine1            = $request->input('storeLine1');
-            $store->storeLine2            = $request->input('storeLine2');
-            $store->zipCode                  = $request->input('zipCode');
-            $store->city                      = $request->input('city');
-            $store->country                   = $request->input('country');
-            $store->latitude                  = $geocoding->getCoordinates()->getLatitude();
-            $store->longitude                 = $geocoding->getCoordinates()->getLongitude();
+            $store = new StoreSlots();
+            $store->id                      = $this->generateId('slot', $store);
+            $store->day                   = $request->input('day');
+            $store->from              = $request->input('from');
+            $store->to              = $request->input('to');
+            $store->quantity                 = $request->input('quantity');
+            $store->available                    = $request->input('available');
 
             $store->save();
 
@@ -97,7 +90,7 @@ class StoreSlotController extends Controller
      *      description="Soft delete a store slot",
      *      @OA\Parameter(
      *          name="id",
-     *          description="Account id",
+     *          description="Store id",
      *          required=true,
      *          in="path",
      *      ),

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Store;
+use App\Models\StoreImage;
 use App\Traits\FiltersTrait;
 use App\Traits\IdTrait;
 use App\Traits\JwtTrait;
@@ -11,7 +12,6 @@ use Bugsnag\BugsnagLaravel\Facades\Bugsnag;
 use Exception;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\JsonEncodingException;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -29,12 +29,8 @@ class StoreImageController extends Controller
      *      tags={"Stores"},
      *      summary="Post a new store image",
      *      description="Create a new store image",
-     *      @OA\Parameter(name="title", description="Store title", required=true, in="query"),
-     *      @OA\Parameter(name="storeLine1", description="Store line 1", required=true, in="query"),
-     *      @OA\Parameter(name="storeLine2", description="Store line 2", in="query"),
-     *      @OA\Parameter(name="zipCode", description="Zip code", required=true, in="query"),
-     *      @OA\Parameter(name="city", description="City", required=true, in="query"),
-     *      @OA\Parameter(name="country", description="Store country", required=true, in="query"),
+     *      @OA\Parameter(name="id", description="Store Id", required=true, in="query"),
+     *      @OA\Parameter(name="image_id", description="Image Id", required=true, in="query"),
      *      @OA\Response(response=201,description="Account created"),
      *      @OA\Response(response=400, description="Bad request"),
      *      @OA\Response(response=404, description="Resource Not Found")
@@ -43,32 +39,25 @@ class StoreImageController extends Controller
     public function addImage(Request $request): JsonResponse
     {
         try {
-            $this->validate($request, [
-                'title'                     => 'required|string',
-                'storeLine1'            => 'required|string',
-                'storeLine2'            => 'string',
-                'zipCode'                  => 'required|string',
-                'city'                      => 'required|string',
-                'state'                     => 'string',
-                'country'                   => 'required|string',
+            $request->validate([
+                'image_id'  => 'required|string',
             ]);
 
             DB::beginTransaction();
 
-            $geocoding = app('geocoder')->geocode($request->input('storeLine1').', '.$request->input('zipCode').''.$request->input('city').''.$request->input('country'))->get()->first();
+            $resultSet = Store::where('stores.id', $request->id);
 
-            $store = new Store();
-            $store->id                        = $this->generateId('store', $store);
-            $store->title                     = $request->input('title');
-            $store->storeLine1            = $request->input('storeLine1');
-            $store->storeLine2            = $request->input('storeLine2');
-            $store->zipCode                  = $request->input('zipCode');
-            $store->city                      = $request->input('city');
-            $store->country                   = $request->input('country');
-            $store->latitude                  = $geocoding->getCoordinates()->getLatitude();
-            $store->longitude                 = $geocoding->getCoordinates()->getLongitude();
+            $store = $resultSet->first();
+            if (empty($store)) {
+                throw new ModelNotFoundException('Store not found.', 404);
+            }
 
-            $store->save();
+            $storeClosing = new StoreImage();
+            $storeClosing->id           = $this->generateId('storeimage', $storeClosing);
+            $storeClosing->store_id     = $store->id;
+            $storeClosing->image_id     = $request->input('image_id');
+
+            $storeClosing->save();
 
             DB::commit();
 
@@ -97,7 +86,7 @@ class StoreImageController extends Controller
      *      description="Soft delete a store image",
      *      @OA\Parameter(
      *          name="id",
-     *          description="Account id",
+     *          description="Store id",
      *          required=true,
      *          in="path",
      *      ),
@@ -117,15 +106,21 @@ class StoreImageController extends Controller
         try {
             DB::beginTransaction();
 
-            $resultSet = Store::select('stores.*')->where('id', $request->id);
+            $resultSet = Store::where('stores.id', $request->id);
 
             $store = $resultSet->first();
-
-            if(empty($store)) {
+            if (empty($store)) {
                 throw new ModelNotFoundException('Store not found.', 404);
             }
 
-            $store->delete();
+            $resultSet = StoreImage::where('stores_images.id', $request->store_image_id);
+
+            $storeImage = $resultSet->first();
+            if (empty($storeImage)) {
+                throw new ModelNotFoundException('Image not found.', 404);
+            }
+
+            $storeImage->delete();
 
             DB::commit();
 

@@ -35,12 +35,12 @@ Route::controller(StoreClosingController::class)->group(function () {
 
 Route::controller(StoreImageController::class)->group(function () {
     Route::post("stores/{id}/images", 'addImage');
-    Route::delete("stores/{id}/images/{id}", 'removeImage');
+    Route::delete("stores/{id}/images/{store_image_id}", 'removeImage');
 });
 
 Route::controller(StoreMediaController::class)->group(function () {
     Route::post("stores/{id}/medias", 'addMedia');
-    Route::delete("stores/{id}/medias/{id}", 'removeMedia');
+    Route::delete("stores/{id}/medias/{media_id}", 'removeMedia');
 });
 
 Route::controller(StoreSlotController::class)->group(function () {
@@ -50,5 +50,5 @@ Route::controller(StoreSlotController::class)->group(function () {
 
 Route::controller(StoreTranslationController::class)->group(function () {
     Route::post("stores/{id}/translations", 'addTranslation');
-    Route::delete("stores/{id}/translations/{id}", 'removeTranslation');
+    Route::delete("stores/{id}/translations", 'removeTranslation');
 });

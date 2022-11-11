@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Store;
+use App\Models\StoreMedia;
 use App\Traits\FiltersTrait;
 use App\Traits\IdTrait;
 use App\Traits\JwtTrait;
@@ -29,12 +30,9 @@ class StoreMediaController extends Controller
      *      tags={"Stores"},
      *      summary="Post a new store media",
      *      description="Create a new store media",
-     *      @OA\Parameter(name="title", description="Store title", required=true, in="query"),
-     *      @OA\Parameter(name="storeLine1", description="Store line 1", required=true, in="query"),
-     *      @OA\Parameter(name="storeLine2", description="Store line 2", in="query"),
-     *      @OA\Parameter(name="zipCode", description="Zip code", required=true, in="query"),
-     *      @OA\Parameter(name="city", description="City", required=true, in="query"),
-     *      @OA\Parameter(name="country", description="Store country", required=true, in="query"),
+     *      @OA\Parameter(name="id", description="Store Id", required=true, in="query"),
+     *      @OA\Parameter(name="url", description="URL", required=true, in="query"),
+     *      @OA\Parameter(name="type", description="Media type", required=true, in="query"),
      *      @OA\Response(response=201,description="Account created"),
      *      @OA\Response(response=400, description="Bad request"),
      *      @OA\Response(response=404, description="Resource Not Found")
@@ -43,32 +41,26 @@ class StoreMediaController extends Controller
     public function addMedia(Request $request): JsonResponse
     {
         try {
-            $this->validate($request, [
-                'title'                     => 'required|string',
-                'storeLine1'            => 'required|string',
-                'storeLine2'            => 'string',
-                'zipCode'                  => 'required|string',
-                'city'                      => 'required|string',
-                'state'                     => 'string',
-                'country'                   => 'required|string',
+            $request->validate([
+                'url'  => 'required|string',
+                'type'  => 'required|string',
             ]);
 
             DB::beginTransaction();
 
-            $geocoding = app('geocoder')->geocode($request->input('storeLine1').', '.$request->input('zipCode').''.$request->input('city').''.$request->input('country'))->get()->first();
+            $resultSet = Store::where('stores.id', $request->id);
 
-            $store = new Store();
-            $store->id                        = $this->generateId('store', $store);
-            $store->title                     = $request->input('title');
-            $store->storeLine1            = $request->input('storeLine1');
-            $store->storeLine2            = $request->input('storeLine2');
-            $store->zipCode                  = $request->input('zipCode');
-            $store->city                      = $request->input('city');
-            $store->country                   = $request->input('country');
-            $store->latitude                  = $geocoding->getCoordinates()->getLatitude();
-            $store->longitude                 = $geocoding->getCoordinates()->getLongitude();
+            $store = $resultSet->first();
+            if (empty($store)) {
+                throw new ModelNotFoundException('Store not found.', 404);
+            }
 
-            $store->save();
+            $storeClosing = new StoreMedia();
+            $storeClosing->id           = $this->generateId('storemedia', $storeClosing);
+            $storeClosing->store_id     = $store->id;
+            $storeClosing->image_id     = $request->input('image_id');
+
+            $storeClosing->save();
 
             DB::commit();
 
@@ -125,7 +117,15 @@ class StoreMediaController extends Controller
                 throw new ModelNotFoundException('Store not found.', 404);
             }
 
-            $store->delete();
+
+            $resultSet = StoreMedia::where('stores_medias.id', $request->media_id);
+
+            $storeMedia = $resultSet->first();
+            if (empty($storeMedia)) {
+                throw new ModelNotFoundException('Media not found.', 404);
+            }
+
+            $storeMedia->delete();
 
             DB::commit();
 

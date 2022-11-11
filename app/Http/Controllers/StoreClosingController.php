@@ -89,7 +89,7 @@ class StoreClosingController extends Controller
      *      description="Soft delete a store closing",
      *      @OA\Parameter(
      *          name="id",
-     *          description="Account id",
+     *          description="Store id",
      *          required=true,
      *          in="path",
      *      ),
